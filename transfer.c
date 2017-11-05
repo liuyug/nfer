@@ -106,7 +106,7 @@ int do_transfer(struct sock_list ** socks)
                     FD_ISSET(sock_node->listen_sock, &fds)) {
                 // accept new connecting
                 struct sockaddr_in addr_accept;
-                int addrlen = sizeof(struct sockaddr_in);
+                socklen_t addrlen = sizeof(struct sockaddr_in);
                 sock = accept(sock_node->listen_sock,
                         (struct sockaddr*)&addr_accept, &addrlen);
                 if(sock != INVALID_SOCKET) {
@@ -137,7 +137,6 @@ int transfer_OneToMany(SOCKET sock, struct sock_list ** socks)
     struct sock_list * sock_node, * cur_node;
     int nbytes;
     unsigned char buffer[MAX_SOCKBUFFER];
-    struct sockaddr_in addr;
     nbytes = recv(sock, buffer, MAX_SOCKBUFFER, 0);
     cur_node = *socks;
     while (cur_node != NULL && cur_node->sock != sock) {
@@ -261,20 +260,21 @@ SOCKET listen_addr(const struct host_addr * haddr)
 int fix_http_host(const char *host, int port, unsigned char buffer[], int nbytes)
 {
     char tmp_buffer[MAX_SOCKBUFFER];
-    const char crln[] = "\x0d\x0a";
     char *pch;
 
     buffer[nbytes] = '\0';
     pch = strstr((char *)buffer, "Host: ");
-    if (pch != NULL) {
-        *pch = '\0';
-        strcpy(tmp_buffer, (char *)buffer);
-
-        sprintf(tmp_buffer + strlen(tmp_buffer), "Host: %s:%d\r\n", host, port);
-
-        pch = strstr(pch + 2, crln);
-        strcat(tmp_buffer, pch + 2);
+    if (pch == NULL) {
+        return nbytes;
     }
+
+    *pch = '\0';
+    strcpy(tmp_buffer, (char *)buffer);
+
+    sprintf(tmp_buffer + strlen(tmp_buffer), "Host: %s:%d\r\n", host, port);
+
+    pch = strstr(pch + 2, "\r\n");
+    strcat(tmp_buffer, pch + 2);
 
     strcpy((char*)buffer, tmp_buffer);
     return strlen((char *)buffer);

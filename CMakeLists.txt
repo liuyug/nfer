@@ -24,14 +24,19 @@ source_group("Resource files" FILES ${resources})
 # add_definitions(-DNDEBUG)
 # add_definitions(-g)
 
+
 add_executable(${app_exe} ${sources} ${headers} ${resources})
 
 # platform
 if (MINGW)
     add_definitions(-D_WIN32)
+    add_definitions(-O2)
+    add_definitions(-Wall)
     target_link_libraries(${app_exe} ws2_32)
-elseif (WIN32)
-    add_definitions(-D_WIN32)
 elseif (UNIX)
     add_definitions(-D_LINUX)
+    add_definitions(-O2)
+    add_definitions(-Wall)
+elseif (WIN32)
+    add_definitions(-D_WIN32)
 endif()
