@@ -7,5 +7,5 @@ int transfer_OneToMany(SOCKET sock, struct sock_list ** socks);
 SOCKET listen_addr(const struct host_addr * haddr);
 SOCKET connect_addr(const struct host_addr * haddr);
 
-int fix_http_host(const char *host, int port, unsigned char buffer[]);
+int fix_http_host(const char *host, int port, unsigned char buffer[], int nbytes);
 #endif

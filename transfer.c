@@ -164,7 +164,7 @@ int transfer_OneToMany(SOCKET sock, struct sock_list ** socks)
                     nbytes = fix_http_host(
                             sock_node->peeraddr.host,
                             sock_node->peeraddr.port,
-                            buffer);
+                            buffer, nbytes);
                 }
                 printf("send %d bytes to %s:%d\n", nbytes,
                         sock_node->peeraddr.host, sock_node->peeraddr.port);
@@ -258,29 +258,24 @@ SOCKET listen_addr(const struct host_addr * haddr)
     return sock;
 }
 
-int fix_http_host(const char *host, int port, unsigned char buffer[])
+int fix_http_host(const char *host, int port, unsigned char buffer[], int nbytes)
 {
     char tmp_buffer[MAX_SOCKBUFFER];
-    tmp_buffer[0] = '\0';
     const char crln[] = "\x0d\x0a";
     char *pch;
-    char *phead = buffer;
-    while (*phead != '\0') {
-        pch = strstr(phead, crln);
+
+    buffer[nbytes] = '\0';
+    pch = strstr((char *)buffer, "Host: ");
+    if (pch != NULL) {
         *pch = '\0';
-        if (strstr(phead, "Host: ") != NULL) {
-            strcat(tmp_buffer, "Host: ");
-            strcat(tmp_buffer, host);
-            // strcat(tmp_buffer, ":");
-            // strcat(tmp_buffer, itoa(port));
-            strcat(tmp_buffer, crln);
-            strcat(tmp_buffer, pch + 2);
-            break;
-        }
-        strcat(tmp_buffer, phead);
-        strcat(tmp_buffer, crln);
-        phead = pch + 2;
+        strcpy(tmp_buffer, (char *)buffer);
+
+        sprintf(tmp_buffer + strlen(tmp_buffer), "Host: %s:%d\r\n", host, port);
+
+        pch = strstr(pch + 2, crln);
+        strcat(tmp_buffer, pch + 2);
     }
+
     strcpy((char*)buffer, tmp_buffer);
-    return strlen(buffer);
+    return strlen((char *)buffer);
 }
