@@ -22,18 +22,16 @@ source_group("Resource files" FILES ${resources})
 
 # debug
 # add_definitions(-DNDEBUG)
-add_definitions(-std=c99)
-add_definitions(-Wformat-security)
 # add_definitions(-g)
 
-include_directories(../)
-
-add_executable(${app_exe} ${sources} ${headers} ${sock} ${resources})
+add_executable(${app_exe} ${sources} ${headers} ${resources})
 
 # platform
 if (MINGW)
     add_definitions(-D_WIN32)
     target_link_libraries(${app_exe} ws2_32)
+elseif (WIN32)
+    add_definitions(-D_WIN32)
 elseif (UNIX)
     add_definitions(-D_LINUX)
 endif()
