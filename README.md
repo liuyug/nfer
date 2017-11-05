@@ -147,7 +147,14 @@ send 1284 bytes to 127.0.0.1:5031
 00000490 3A 2F 2F 77 77 77 2E 6D  69 63 72 6F 73 6F 66 74  |://www.microsoft|
 000004A0 2E 63 6F 6D 2F 65 6E 2F  75 73 2F 64 65 66 61 75  |.com/en/us/defau|
 000004B0 6C 74 2E 61 73 70 78 3F  72 65 64 69 72 3D 74 72  |lt.aspx?redir=tr|
-000004C0 75 65 22 3E 55 6E 69 74  65 64 20 53 74 61 74 
+000004C0 75 65 22 3E 55 6E 69 74  65 64 20 53 74 61 74 65  |ue">United State|
+000004D0 73 20 45 6E 67 6C 69 73  68 20 4D 69 63 72 6F 73  |s English Micros|
+000004E0 6F 66 74 20 48 6F 6D 65  70 61 67 65 3C 2F 61 3E  |oft Homepage</a>|
+000004F0 3C 2F 70 3E 3C 2F 62 6F  64 79 3E 3C 2F 68 74 6D  |</p></body></htm|
+00000500 6C 3E 0D 0A                                       |l>..|
+disconnected 127.0.0.1:7590
+disconnected www.microsoft.com:80
+connect to www.microsoft.com:80
 ```
 
 
