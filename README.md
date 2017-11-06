@@ -10,8 +10,9 @@ cd build
 
 # for mingw
 # cmake -G "MinGW Makefiles" ../
-# for make or nmake
+# for linux
 cmake ../
+# no support for msvc. It has no getopt.h
 
 make clean
 make
